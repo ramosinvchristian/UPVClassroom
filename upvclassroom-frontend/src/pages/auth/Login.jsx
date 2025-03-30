@@ -8,6 +8,7 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(""); // Limpiar error previo
 
     try {
       const response = await axios.post("http://localhost:8000/api/login", {
@@ -16,14 +17,20 @@ function Login() {
       });
 
       const { token, user } = response.data;
+
+      // Guardar en localStorage
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
 
+      // Redirección según el rol
       if (user.role === "teacher") {
         window.location.href = "/teacher/classes";
-      } else {
+      } else if (user.role === "student") {
         window.location.href = "/student/classes";
+      } else {
+        setError("Rol desconocido.");
       }
+
     } catch (err) {
       setError("Credenciales incorrectas");
     }

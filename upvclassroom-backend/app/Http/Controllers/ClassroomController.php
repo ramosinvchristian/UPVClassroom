@@ -11,22 +11,25 @@ class ClassroomController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string',
+            'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'group_code' => 'required|unique:classrooms',
+            'group_code' => 'required|string|unique:classes,group_code',
             'career' => 'required|string',
-            'semester' => 'required|string',
+            'cuatrimestre' => 'required|string',
         ]);
 
         $classroom = Classroom::create([
+            'teacher_id' => Auth::id(),
             'name' => $request->name,
             'description' => $request->description,
             'group_code' => $request->group_code,
             'career' => $request->career,
-            'semester' => $request->semester,
-            'teacher_id' => Auth::id(),
+            'cuatrimestre' => $request->cuatrimestre,
         ]);
 
-        return response()->json($classroom, 201);
+        return response()->json([
+            'message' => 'Clase creada exitosamente',
+            'classroom' => $classroom
+        ], 201);
     }
 }

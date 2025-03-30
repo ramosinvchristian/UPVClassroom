@@ -5,18 +5,21 @@ const careers = ["Ingeniería en Sistemas", "Administración", "Contaduría"];
 const semesters = ["1", "2", "3", "4", "5", "6", "7", "8"];
 
 function CreateClass() {
-  const [formData, setFormData] = useState({
-    name: "",
-    description: "",
-    group_code: "",
-    career: "",
-    semester: "",
-  });
+const [formData, setFormData] = useState({
+  name: "",
+  description: "",
+  group_code: "",
+  career: "",
+  cuatrimestre: "", // antes decía "semester"
+});
 
   const [message, setMessage] = useState("");
+  const [error, setError] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    setMessage(""); // Limpiar mensaje al cambiar campos
+    setError(false);
   };
 
   const handleSubmit = async (e) => {
@@ -24,15 +27,22 @@ function CreateClass() {
 
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.post("http://localhost:8000/api/classrooms", formData, {
+      await axios.post("http://localhost:8000/api/classrooms", formData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      setMessage("Clase creada correctamente.");
-      setFormData({ name: "", description: "", group_code: "", career: "", semester: "" });
+
+      // Mensaje temporal y redirección
+      setMessage("✅ Clase creada correctamente.");
+      setError(false);
+
+      setTimeout(() => {
+        window.location.href = "/teacher/classes";
+      }, 1000);
     } catch (err) {
-      setMessage("Error al crear la clase.");
+      setMessage("❌ Error al crear la clase.");
+      setError(true);
     }
   };
 
@@ -44,7 +54,11 @@ function CreateClass() {
       >
         <h2 className="text-xl font-bold mb-4 text-center">Crear Nueva Clase</h2>
 
-        {message && <p className="text-center mb-4 text-green-600">{message}</p>}
+        {message && (
+          <p className={`text-center mb-4 ${error ? "text-red-600" : "text-green-600"}`}>
+            {message}
+          </p>
+        )}
 
         <input
           type="text"
@@ -90,8 +104,8 @@ function CreateClass() {
         </select>
 
         <select
-          name="semester"
-          value={formData.semester}
+          name="cuatrimestre" // CAMBIO AQUÍ
+          value={formData.cuatrimestre}
           onChange={handleChange}
           className="w-full border p-2 mb-3"
           required
@@ -99,14 +113,15 @@ function CreateClass() {
           <option value="">Selecciona cuatrimestre</option>
           {semesters.map((s, i) => (
             <option key={i} value={s}>
-              {s}
+              {s}° Cuatrimestre
             </option>
           ))}
         </select>
 
+
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
         >
           Crear Clase
         </button>
