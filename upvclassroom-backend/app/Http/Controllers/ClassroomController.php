@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 
 class ClassroomController extends Controller
 {
+    // Crear clase
     public function store(Request $request)
     {
         $request->validate([
@@ -31,5 +32,18 @@ class ClassroomController extends Controller
             'message' => 'Clase creada exitosamente',
             'classroom' => $classroom
         ], 201);
+    }
+
+    // Obtener clases creadas por el maestro autenticado
+    public function getTeacherClasses(Request $request)
+    {
+        $user = $request->user();
+
+        if ($user->role !== 'teacher') {
+            return response()->json(['message' => 'No autorizado'], 403);
+        }
+
+        $classes = Classroom::where('teacher_id', $user->id)->get();
+        return response()->json($classes);
     }
 }
