@@ -69,4 +69,22 @@ class ClassroomController extends Controller
             'notices' => $notices
         ]);
     }
+
+    // ✅ Mostrar detalles de una clase para el alumno (sin restricción de maestro)
+    public function showForStudent($id)
+    {
+        $classroom = Classroom::find($id);
+
+        if (!$classroom) {
+            return response()->json(['message' => 'Clase no encontrada.'], 404);
+        }
+
+        // Verificar si el alumno está inscrito
+        $user = auth()->user();
+        if ($user->role !== 'student' || !$classroom->students->contains($user->id)) {
+            return response()->json(['message' => 'No autorizado.'], 403);
+        }
+
+        return response()->json(['classroom' => $classroom]);
+    }
 }

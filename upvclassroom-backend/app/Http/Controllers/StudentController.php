@@ -33,7 +33,6 @@ class StudentController extends Controller
         $classroom = Classroom::findOrFail($classroom_id);
         $studentId = $request->input('student_id');
 
-        // Evitar duplicados
         if ($classroom->students()->where('user_id', $studentId)->exists()) {
             return response()->json(['message' => 'El alumno ya está en la clase.'], 409);
         }
@@ -49,12 +48,28 @@ class StudentController extends Controller
         $classroom = Classroom::findOrFail($classroomId);
         $student = User::where('id', $studentId)->where('role', 'student')->firstOrFail();
 
-        // Verifica si el alumno pertenece a la clase
         if ($classroom->students()->where('user_id', $studentId)->exists()) {
             $classroom->students()->detach($studentId);
             return response()->json(['message' => 'Alumno eliminado correctamente.']);
         }
 
         return response()->json(['message' => 'El alumno no está registrado en esta clase.'], 404);
+    }
+
+    // 🆕 Obtener clases en las que está inscrito el alumno autenticado
+    public function myClasses(Request $request)
+    {
+        $user = $request->user();
+
+        if ($user->role !== 'student') {
+            return response()->json(['message' => 'No autorizado.'], 403);
+        }
+
+        $classes = $user->enrolledClasses()->withCount('students')->get();
+
+        return response()->json([
+            'message' => 'Clases inscritas correctamente.',
+            'classes' => $classes
+        ]);
     }
 }
