@@ -10,7 +10,7 @@ class Classroom extends Model
 {
     use HasFactory;
 
-    protected $table = 'classes'; 
+    protected $table = 'classes';
 
     protected $fillable = [
         'name',
@@ -21,8 +21,15 @@ class Classroom extends Model
         'teacher_id'
     ];
 
+    // Relación con el maestro
     public function teacher()
     {
         return $this->belongsTo(User::class, 'teacher_id');
+    }
+
+    // Relación con alumnos inscritos
+    public function students()
+    {
+        return $this->belongsToMany(User::class, 'classroom_user', 'classroom_id', 'user_id');
     }
 }

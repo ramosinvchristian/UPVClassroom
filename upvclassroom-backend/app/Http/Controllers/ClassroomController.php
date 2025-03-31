@@ -46,4 +46,23 @@ class ClassroomController extends Controller
         $classes = Classroom::where('teacher_id', $user->id)->get();
         return response()->json($classes);
     }
+
+    // Obtener detalle de una clase (incluye alumnos)
+    public function show($id)
+    {
+        $classroom = Classroom::with('students')->find($id);
+
+        if (!$classroom) {
+            return response()->json(['message' => 'Clase no encontrada.'], 404);
+        }
+
+        if (auth()->id() !== $classroom->teacher_id) {
+            return response()->json(['message' => 'No autorizado.'], 403);
+        }
+
+        return response()->json([
+            'classroom' => $classroom,
+            'students' => $classroom->students
+        ]);
+    }
 }

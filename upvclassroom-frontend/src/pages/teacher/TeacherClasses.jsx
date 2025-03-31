@@ -16,8 +16,7 @@ function TeacherClasses() {
           },
         });
 
-        // 👇 Aquí se asume que el backend retorna un array directamente
-        setClasses(res.data); // No res.data.classes
+        setClasses(res.data); // El backend retorna el array directamente
       } catch (err) {
         setError("Error al cargar las clases.");
       } finally {
@@ -43,7 +42,11 @@ function TeacherClasses() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {classes.map((classroom) => (
-            <div key={classroom.id} className="bg-white rounded shadow p-4">
+            <a
+              href={`/teacher/classes/${classroom.id}`}
+              key={classroom.id}
+              className="block bg-white rounded shadow p-4 hover:shadow-lg transition"
+            >
               <h3 className="text-xl font-bold mb-2">{classroom.name}</h3>
               <p className="text-sm text-gray-700 mb-1">{classroom.description}</p>
               <p className="text-sm text-gray-500">
@@ -52,7 +55,7 @@ function TeacherClasses() {
               <p className="text-sm text-gray-500">
                 Carrera: {classroom.career} — Cuatrimestre: {classroom.cuatrimestre}
               </p>
-            </div>
+            </a>
           ))}
         </div>
       )}
