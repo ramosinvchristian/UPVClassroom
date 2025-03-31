@@ -4,6 +4,8 @@ import CreateClass from "./pages/teacher/CreateClass";
 import TeacherClasses from "./pages/teacher/TeacherClasses"; // ✅ Importamos el nuevo componente
 import AddStudent from "./pages/teacher/AddStudent"; // importa el componente
 import ClassDetail from "./pages/teacher/ClassDetail"; // ✅ Importado
+import AddNotice from "./pages/teacher/AddNotice"; // 👈 Asegúrate de importar
+
 
 
 function App() {
@@ -17,6 +19,7 @@ function App() {
         <Route path="/teacher/class/:id/add-student" element={<AddStudent />} />
         <Route path="/teacher/class/:id" element={<ClassDetail />} />
         <Route path="/teacher/classes/:id" element={<ClassDetail />} /> {/* ✅ Nueva ruta */}
+        <Route path="/teacher/classes/:id/add-notice" element={<AddNotice />} /> // 👈 Agrega esta ruta si aún no la tienes
 
       </Routes>
     </BrowserRouter>

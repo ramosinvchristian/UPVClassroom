@@ -47,7 +47,7 @@ class ClassroomController extends Controller
         return response()->json($classes);
     }
 
-    // Obtener detalle de una clase (incluye alumnos)
+    // Obtener detalle de una clase (incluye alumnos y avisos)
     public function show($id)
     {
         $classroom = Classroom::with('students')->find($id);
@@ -60,9 +60,13 @@ class ClassroomController extends Controller
             return response()->json(['message' => 'No autorizado.'], 403);
         }
 
+        // 🔽 Obtener también los avisos de la clase
+        $notices = $classroom->notices()->orderBy('created_at', 'desc')->get();
+
         return response()->json([
             'classroom' => $classroom,
-            'students' => $classroom->students
+            'students' => $classroom->students,
+            'notices' => $notices
         ]);
     }
 }

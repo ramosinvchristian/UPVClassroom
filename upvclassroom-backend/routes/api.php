@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClassroomController;
 use App\Http\Controllers\StudentController; // ✅ Importado
+use App\Http\Controllers\NoticeController;
+
 
 // Ruta pública para login
 Route::post('/login', [AuthController::class, 'login']);
@@ -28,5 +30,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/classrooms/{classroom}/remove-student/{student}', [StudentController::class, 'removeStudent']);
 
     Route::get('/search-students', [StudentController::class, 'search']); // 👈 ESTA ES LA CLAVE
+
+    Route::get('/classrooms/{id}/notices', [NoticeController::class, 'index']);
+    Route::post('/classrooms/{id}/notices', [NoticeController::class, 'store']);
 
 });
