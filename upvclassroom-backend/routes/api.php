@@ -5,6 +5,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClassroomController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\NoticeController;
+use App\Http\Controllers\TemaController;
+use App\Http\Controllers\TareaController;
 
 // 🔓 Ruta pública para login
 Route::post('/login', [AuthController::class, 'login']);
@@ -37,6 +39,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/classrooms/{id}/notices', [NoticeController::class, 'index']);
     Route::post('/classrooms/{id}/notices', [NoticeController::class, 'store']);
 
-    Route::get('/student/classrooms/{id}', [ClassroomController::class, 'showForStudent']);
+    // 📑 Registrar nuevo tema
+    Route::post('/temas', [TemaController::class, 'store']);
 
+    // 📝 Registrar nueva tarea
+    Route::post('/tareas', [TareaController::class, 'store']);
+
+    Route::get('/student/classrooms/{id}', [ClassroomController::class, 'showForStudent']);
 });
