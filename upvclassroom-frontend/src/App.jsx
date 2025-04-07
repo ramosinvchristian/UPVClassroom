@@ -1,19 +1,42 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/auth/Login";
-import CreateClass from "./pages/teacher/CreateClass"; // ✅ Importación agregada
+import CreateClassView from "./pages/teacher/CreateClassView"; // ✅ Importación agregada
+import TeacherClassView from "./pages/teacher/TeacherClassView";
+import PeopleClassView from "./pages/teacher/PeopleClassView";
+import ClassWorkView from "./pages/teacher/ClassworkView";
+import CreateThemeView from "./pages/teacher/CreateThemeView";
+import CreateHomeworkView from "./pages/teacher/CreateHomeworkView";
+import CreateMaterialView from "./pages/teacher/CreateMaterialView";
+import HomeView from "./pages/teacher/HomeView";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+
+        {/* Vista Login */}
         <Route path="/" element={<Login />} />
+
         {/* Rutas privadas futuras */}
         <Route path="/teacher/classes" element={<h1>Clases del Maestro</h1>} />
         <Route path="/student/classes" element={<h1>Clases del Alumno</h1>} />
-        <Route path="/teacher/create-class" element={<CreateClass />} /> {/* ✅ Nueva ruta */}
+    
+        {/* Vistas Maestros */}
+        <Route path="/teacher/home" element={<HomeView />} />
+        <Route path="/teacher/create-class" element={<CreateClassView />} /> 
+        <Route path="/teacher/class" element={<TeacherClassView />} />
+        <Route path="/teacher/people" element={<PeopleClassView />} />
+        <Route path="/teacher/create-theme" element={<CreateThemeView />} />
+        <Route path="/teacher/create-homework" element={<CreateHomeworkView />} />
+        <Route path="/teacher/create-material" element={<CreateMaterialView />} />
+        <Route path="/teacher/classwork" element={<ClassWorkView />} />
+        
+        {/* <Route path="/teacher/home" element={<ClassroomHome />} /> */}
+
       </Routes>
     </BrowserRouter>
   );
 }
 
 export default App;
+
