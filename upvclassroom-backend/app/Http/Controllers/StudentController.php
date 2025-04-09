@@ -26,17 +26,23 @@ class StudentController extends Controller
     // Asociar un estudiante a una clase
     public function addStudent(Request $request, $classroom_id)
     {
+        // Validamos que el student_id exista en la tabla 'users'
         $request->validate([
             'student_id' => 'required|exists:users,id',
         ]);
 
-        $classroom = Classroom::findOrFail($classroom_id);
+        // Asignamos el student_id desde la solicitud
         $studentId = $request->input('student_id');
 
+        // Buscamos la clase por su ID
+        $classroom = Classroom::findOrFail($classroom_id);
+
+        // Verificamos si el alumno ya está asociado a la clase
         if ($classroom->students()->where('user_id', $studentId)->exists()) {
             return response()->json(['message' => 'El alumno ya está en la clase.'], 409);
         }
 
+        // Asociamos el estudiante con la clase
         $classroom->students()->attach($studentId);
 
         return response()->json(['message' => 'Alumno agregado a la clase correctamente.']);
@@ -48,6 +54,7 @@ class StudentController extends Controller
         $classroom = Classroom::findOrFail($classroomId);
         $student = User::where('id', $studentId)->where('role', 'student')->firstOrFail();
 
+        // Verificamos si el alumno está en la clase
         if ($classroom->students()->where('user_id', $studentId)->exists()) {
             $classroom->students()->detach($studentId);
             return response()->json(['message' => 'Alumno eliminado correctamente.']);
@@ -56,7 +63,7 @@ class StudentController extends Controller
         return response()->json(['message' => 'El alumno no está registrado en esta clase.'], 404);
     }
 
-    // 🆕 Obtener clases en las que está inscrito el alumno autenticado
+    // Obtener clases en las que está inscrito el alumno autenticado
     public function myClasses(Request $request)
     {
         $user = $request->user();

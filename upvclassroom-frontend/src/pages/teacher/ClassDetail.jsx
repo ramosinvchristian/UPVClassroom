@@ -106,7 +106,7 @@ function ClassDetail() {
           <form onSubmit={handleSearch} className="flex gap-2 mb-4">
             <input
               type="text"
-              placeholder="Buscar alumno por nombre o matrícula"
+              placeholder="Buscar alumno por nombre o correo"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="flex-1 border p-2 rounded"

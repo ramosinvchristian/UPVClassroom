@@ -14,7 +14,7 @@ class ClassroomController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'group_code' => 'required|string|unique:classes,group_code',
+            'group_code' => 'required|string|unique:classrooms,group_code', // ✅ corregido
             'career' => 'required|string',
             'cuatrimestre' => 'required|string',
         ]);
@@ -70,21 +70,25 @@ class ClassroomController extends Controller
         ]);
     }
 
-    // ✅ Mostrar detalles de una clase para el alumno (sin restricción de maestro)
+    // ✅ Mostrar detalles de una clase para el alumno (con avisos)
     public function showForStudent($id)
     {
-        $classroom = Classroom::find($id);
+        $classroom = Classroom::with('students', 'notices')->find($id);
 
         if (!$classroom) {
             return response()->json(['message' => 'Clase no encontrada.'], 404);
         }
 
-        // Verificar si el alumno está inscrito
         $user = auth()->user();
+
+        // Verifica si es alumno y si está inscrito
         if ($user->role !== 'student' || !$classroom->students->contains($user->id)) {
             return response()->json(['message' => 'No autorizado.'], 403);
         }
 
-        return response()->json(['classroom' => $classroom]);
+        return response()->json([
+            'classroom' => $classroom,
+            'notices' => $classroom->notices()->orderBy('created_at', 'desc')->get()
+        ]);
     }
 }

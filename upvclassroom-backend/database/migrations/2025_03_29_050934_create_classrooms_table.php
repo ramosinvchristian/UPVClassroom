@@ -17,7 +17,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->string('group_code')->unique();
             $table->string('career');
-            $table->string('semester'); // o 'cuatrimestre'
+            $table->string('cuatrimestre'); // o 'cuatrimestre'
             $table->unsignedBigInteger('teacher_id');
             $table->timestamps();
 

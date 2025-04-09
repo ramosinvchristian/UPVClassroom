@@ -5,12 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
+use App\Models\Notice;
 
 class Classroom extends Model
 {
     use HasFactory;
 
-    protected $table = 'classes';
+    // ✅ Asegúrate de que coincida con el nombre real en la base de datos
+    protected $table = 'classrooms';
 
     protected $fillable = [
         'name',
@@ -32,7 +34,6 @@ class Classroom extends Model
     {
         return $this->belongsToMany(User::class, 'classroom_user', 'classroom_id', 'user_id');
     }
-
     public function notices()
     {
         return $this->hasMany(Notice::class);

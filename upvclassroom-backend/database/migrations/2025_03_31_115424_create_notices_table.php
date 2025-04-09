@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('notices', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('classroom_id')->constrained('classes')->onDelete('cascade');
+            // Aquí corregimos 'classes' a 'classrooms'
+            $table->foreignId('classroom_id')->constrained('classrooms')->onDelete('cascade');
             $table->text('content');
             $table->string('attachment')->nullable(); // Ruta al archivo (PDF o imagen)
             $table->timestamps();

@@ -1,8 +1,9 @@
 import { useState } from "react";
 import axios from "axios";
 
-const careers = ["Ingeniería en Sistemas", "Administración", "Contaduría"];
-const semesters = ["1", "2", "3", "4", "5", "6", "7", "8"];
+const careers = ["Ingeniería Mecatrónica", "Ingeniería en Tecnologías de la Información e Innovación Digital", 
+                 "Ingeniería en Manufactura Avanzada", "Ingeniería en Sistemas Automotrices"];
+const semesters = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
 
 function CreateClass() {
 const [formData, setFormData] = useState({

@@ -7,6 +7,7 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\NoticeController;
 use App\Http\Controllers\TemaController;
 use App\Http\Controllers\TareaController;
+use App\Http\Controllers\StudentSearchController;
 
 // 🔓 Ruta pública para login
 Route::post('/login', [AuthController::class, 'login']);
@@ -46,4 +47,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/tareas', [TareaController::class, 'store']);
 
     Route::get('/student/classrooms/{id}', [ClassroomController::class, 'showForStudent']);
+
+    // Definir la ruta para buscar estudiantes
+    Route::get('/search-students', [StudentController::class, 'search']);
+
+
+
 });
