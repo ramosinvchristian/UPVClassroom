@@ -40,7 +40,7 @@ class NoticeController extends Controller
             'content' => $request->content, // ← importante
             'attachment' => $attachmentPath,
         ]);
-
+//perro
         return response()->json([
             'message' => 'Aviso creado exitosamente.',
             'notice' => $notice
