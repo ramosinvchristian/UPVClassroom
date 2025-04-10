@@ -211,22 +211,26 @@ function ClassDetail() {
         )}
       </div>
 
-      {/* 📘 Temas de la clase */}
-      <div className="max-w-xl mx-auto bg-white p-4 rounded shadow mb-6">
-        <h4 className="font-semibold mb-2">Temas registrados:</h4>
-        {topics.length === 0 ? (
-          <p>No hay temas aún.</p>
-        ) : (
-          <ul className="space-y-2 list-disc list-inside">
-            {topics.map((topic) => (
-              <li key={topic.id}>
-                <strong>{topic.name}</strong>
-                {topic.description && <p className="text-sm text-gray-600">{topic.description}</p>}
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
+      {/* ✅ Tareas de la clase */}
+<div className="max-w-xl mx-auto bg-white p-4 rounded shadow mb-6">
+  <h4 className="font-semibold mb-2">Tareas asignadas:</h4>
+  {tasks.length === 0 ? (
+    <p>No hay tareas registradas aún.</p>
+  ) : (
+    <ul className="space-y-4">
+      {tasks.map((task) => (
+        <li key={task.id} className="border-b pb-2">
+          <p><strong>{task.name}</strong></p>
+          <p className="text-gray-600 text-sm">{task.description}</p>
+          <p className="text-sm">📘 Tema: {task.topic?.name || 'Sin tema'}</p>
+          <p className="text-xs text-gray-500">
+            Fecha de entrega: {new Date(task.due_date).toLocaleDateString()}
+          </p>
+        </li>
+      ))}
+    </ul>
+  )}
+</div>
 
       {/* ✅ Tareas de la clase */}
       <div className="max-w-xl mx-auto bg-white p-4 rounded shadow mb-6">
@@ -239,7 +243,7 @@ function ClassDetail() {
               <li key={task.id} className="border-b pb-2">
                 <p><strong>{task.title}</strong></p>
                 <p className="text-gray-600 text-sm">{task.instructions}</p>
-                <p className="text-sm">📘 Tema: {task.topic?.title || 'Sin tema'}</p>
+                <p className="text-sm">📘 Tema: {task.topic?.name || 'Sin tema'}</p>
                 <p className="text-xs text-gray-500">
                   Fecha de entrega: {new Date(task.due_date).toLocaleDateString()}
                 </p>

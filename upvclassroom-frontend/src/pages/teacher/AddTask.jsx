@@ -1,3 +1,4 @@
+// src/pages/teacher/AddTask.jsx
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -51,59 +52,26 @@ const AddTask = () => {
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label>Tema</label>
-          <select
-            name="topic_id"
-            value={form.topic_id}
-            onChange={handleChange}
-            className="w-full border p-2 rounded"
-            required
-          >
+          <select name="topic_id" value={form.topic_id} onChange={handleChange} className="w-full border p-2 rounded" required>
             <option value="">Selecciona un tema</option>
             {topics.map((topic) => (
-              <option key={topic.id} value={topic.id}>
-                {topic.name}
-              </option>
+              <option key={topic.id} value={topic.id}>{topic.name}</option>
             ))}
           </select>
         </div>
         <div>
-          <label>Título</label>
-          <input
-            type="text"
-            name="name"
-            value={form.name}
-            onChange={handleChange}
-            className="w-full border p-2 rounded"
-            required
-          />
+          <label>Nombre</label>
+          <input type="text" name="name" value={form.name} onChange={handleChange} className="w-full border p-2 rounded" required />
         </div>
         <div>
-          <label>Instrucciones</label>
-          <textarea
-            name="description"
-            value={form.description}
-            onChange={handleChange}
-            className="w-full border p-2 rounded"
-            required
-          />
+          <label>Descripción</label>
+          <textarea name="description" value={form.description} onChange={handleChange} className="w-full border p-2 rounded" required />
         </div>
         <div>
           <label>Fecha de entrega</label>
-          <input
-            type="date"
-            name="due_date"
-            value={form.due_date}
-            onChange={handleChange}
-            className="w-full border p-2 rounded"
-            required
-          />
+          <input type="date" name="due_date" value={form.due_date} onChange={handleChange} className="w-full border p-2 rounded" required />
         </div>
-        <button
-          type="submit"
-          className="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700"
-        >
-          Registrar
-        </button>
+        <button type="submit" className="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700">Registrar</button>
       </form>
     </div>
   );
