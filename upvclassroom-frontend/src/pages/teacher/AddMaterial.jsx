@@ -74,9 +74,8 @@ const AddMaterial = () => {
           <label>Tema</label>
           <select name="topic_id" value={form.topic_id} onChange={handleChange} className="w-full border p-2 rounded" required>
             <option value="">Selecciona un tema</option>
-            <option value="Abc">Ponis</option>
-            {topics.map((topic) => (
-              <option key={topic.id} value={topic.id}>{topic.title}</option>
+             {topics.map((topic) => (
+              <option key={topic.id} value={topic.id}>{topic.name}</option>
             ))}
           </select>
         </div>
