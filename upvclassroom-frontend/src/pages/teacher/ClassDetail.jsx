@@ -11,6 +11,9 @@ function ClassDetail() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [message, setMessage] = useState("");
+  const [topics, setTopics] = useState([]);
+  const [tasks, setTasks] = useState([]);
+  const [materials, setMaterials] = useState([]);
 
   const token = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("user"));
@@ -18,7 +21,38 @@ function ClassDetail() {
 
   useEffect(() => {
     fetchClass();
+    fetchTopics();
+    fetchTasks();
+    fetchMaterials();
+
   }, [id]);
+
+  const fetchMaterials = async () => {
+    try {
+      const res = await axios.get(`http://localhost:8000/api/classrooms/${id}/materials`, { headers });
+      setMaterials(res.data);
+    } catch (err) {
+      console.error("Error al obtener materiales", err);
+    }
+  };
+
+  const fetchTasks = async () => {
+    try {
+      const res = await axios.get(`http://localhost:8000/api/classrooms/${id}/tasks`, { headers });
+      setTasks(res.data);
+    } catch (err) {
+      console.error("Error al obtener tareas", err);
+    }
+  };
+
+  const fetchTopics = async () => {
+    try {
+      const res = await axios.get(`http://localhost:8000/api/classrooms/${id}/topics`, { headers });
+      setTopics(res.data);
+    } catch (err) {
+      console.error("Error al obtener los temas", err);
+    }
+  };
 
   const fetchClass = async () => {
     try {
@@ -26,7 +60,6 @@ function ClassDetail() {
       setClassroom(res.data.classroom);
       setStudents(res.data.students);
       setNotices(res.data.notices || []);
-      //setNotices(res.data.notices); // ✅ Avisos
     } catch (err) {
       console.error("Error al obtener los datos de la clase", err);
     } finally {
@@ -81,19 +114,42 @@ function ClassDetail() {
       <h2 className="text-3xl font-bold text-center mb-2">{classroom.name}</h2>
       <p className="text-center text-gray-600 mb-4">{classroom.description}</p>
 
-      {/* ➕ Botón para agregar aviso */}
+      {/* Botones de maestro */}
       {user?.role === "teacher" && (
-        <div className="text-center mb-6">
+        <div className="text-center mb-6 space-y-4">
+          {/* ➕ Agregar aviso */}
           <Link
             to={`/teacher/classes/${id}/add-notice`}
             className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
           >
             ➕ Agregar Aviso
           </Link>
+
+          {/* 📘 Nuevos botones para registrar contenido */}
+          <div className="flex flex-col gap-2 mt-4 items-center">
+            <Link
+              to={`/teacher/classes/${id}/add-topic`}
+              className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"
+            >
+              📘 Registrar un nuevo tema
+            </Link>
+            <Link
+              to={`/teacher/classes/${id}/create-task`}
+              className="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700 transition"
+            >
+              📝 Registrar una nueva tarea
+            </Link>
+            <Link
+              to={`/teacher/classes/${id}/create-material`}
+              className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition"
+            >
+              📎 Registrar nuevo material de clase
+            </Link>
+          </div>
         </div>
       )}
 
-      {/* Información básica */}
+      {/* Información de clase */}
       <div className="max-w-xl mx-auto bg-white rounded p-4 shadow mb-6">
         <p><strong>Código:</strong> {classroom.group_code}</p>
         <p><strong>Carrera:</strong> {classroom.career}</p>
@@ -154,6 +210,73 @@ function ClassDetail() {
           </ul>
         )}
       </div>
+
+      {/* 📘 Temas de la clase */}
+      <div className="max-w-xl mx-auto bg-white p-4 rounded shadow mb-6">
+        <h4 className="font-semibold mb-2">Temas registrados:</h4>
+        {topics.length === 0 ? (
+          <p>No hay temas aún.</p>
+        ) : (
+          <ul className="space-y-2 list-disc list-inside">
+            {topics.map((topic) => (
+              <li key={topic.id}>
+                <strong>{topic.title}</strong>
+                {topic.description && <p className="text-sm text-gray-600">{topic.description}</p>}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      {/* ✅ Tareas de la clase */}
+      <div className="max-w-xl mx-auto bg-white p-4 rounded shadow mb-6">
+        <h4 className="font-semibold mb-2">Tareas asignadas:</h4>
+        {tasks.length === 0 ? (
+          <p>No hay tareas registradas aún.</p>
+        ) : (
+          <ul className="space-y-4">
+            {tasks.map((task) => (
+              <li key={task.id} className="border-b pb-2">
+                <p><strong>{task.title}</strong></p>
+                <p className="text-gray-600 text-sm">{task.instructions}</p>
+                <p className="text-sm">📘 Tema: {task.topic?.title || 'Sin tema'}</p>
+                <p className="text-xs text-gray-500">
+                  Fecha de entrega: {new Date(task.due_date).toLocaleDateString()}
+                </p>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      {/* 📚 Materiales de clase */}
+      <div className="max-w-xl mx-auto bg-white p-4 rounded shadow mb-6">
+        <h4 className="font-semibold mb-2">Materiales compartidos:</h4>
+        {materials.length === 0 ? (
+          <p>No hay materiales registrados aún.</p>
+        ) : (
+          <ul className="space-y-4">
+            {materials.map((material) => (
+              <li key={material.id} className="border-b pb-2">
+                <p><strong>{material.title}</strong></p>
+                {material.description && <p className="text-gray-600 text-sm">{material.description}</p>}
+                <p className="text-sm text-gray-500">📘 Tema: {material.topic?.title}</p>
+                {material.file_path && (
+                  <a
+                    href={`http://localhost:8000/storage/${material.file_path}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 text-sm"
+                  >
+                    📎 Ver archivo adjunto
+                  </a>
+                )}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
 
       {/* 📢 Avisos */}
       <div className="max-w-xl mx-auto bg-white p-4 rounded shadow">

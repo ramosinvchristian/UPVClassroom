@@ -8,18 +8,26 @@ use Illuminate\Http\Request;
 
 class TopicController extends Controller
 {
-    public function store(Request $request, $classroom_id)
+    public function store(Request $request, $id)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
         ]);
-
-        $classroom = Classroom::findOrFail($classroom_id);
-
-        $topic = $classroom->topics()->create([
-            'name' => $request->name,
+    
+        $topic = Topic::create([
+            'title' => $validated['title'],
+            'description' => $validated['description'] ?? null,
+            'classroom_id' => $id,
         ]);
-
-        return response()->json($topic, 201);
+    
+        return response()->json(['message' => 'Tema creado correctamente', 'topic' => $topic], 201);
     }
+
+    public function index($id)
+    {
+        $topics = \App\Models\Topic::where('classroom_id', $id)->get();
+        return response()->json($topics);
+    }
+
 }

@@ -1,41 +1,80 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
 
-const AddTask = ({ topicId }) => {
-    const [name, setName] = useState('');
-    const [description, setDescription] = useState('');
-    const [dueDate, setDueDate] = useState('');
+const AddTask = () => {
+  const { id } = useParams(); // id de la clase
+  const navigate = useNavigate();
+  const [topics, setTopics] = useState([]);
+  const [form, setForm] = useState({
+    title: "",
+    instructions: "",
+    due_date: "",
+    topic_id: "",
+  });
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            await axios.post(`/api/topics/${topicId}/tasks`, { name, description, due_date: dueDate });
-            alert('Tarea agregada con éxito');
-            setName('');
-            setDescription('');
-            setDueDate('');
-        } catch (error) {
-            alert('Error al agregar tarea');
-        }
-    };
+  const token = localStorage.getItem("token");
+  const headers = { Authorization: `Bearer ${token}` };
 
-    return (
-        <form onSubmit={handleSubmit}>
-            <label>
-                Nombre de la Tarea:
-                <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
-            </label>
-            <label>
-                Descripción:
-                <textarea value={description} onChange={(e) => setDescription(e.target.value)} required />
-            </label>
-            <label>
-                Fecha de Entrega:
-                <input type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} required />
-            </label>
-            <button type="submit">Agregar Tarea</button>
-        </form>
-    );
+  useEffect(() => {
+    fetchTopics();
+  }, []);
+
+  const fetchTopics = async () => {
+    try {
+      const res = await axios.get(`http://localhost:8000/api/classrooms/${id}/topics`, { headers });
+      setTopics(res.data);
+    } catch (err) {
+      console.error("Error al obtener los temas", err);
+    }
+  };
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.post(`http://localhost:8000/api/classrooms/${id}/tasks`, form, { headers });
+      alert("Tarea registrada correctamente");
+      navigate(`/teacher/classes/${id}`);
+    } catch (err) {
+      console.error("Error al registrar tarea", err);
+      alert("No se pudo registrar la tarea");
+    }
+  };
+
+  return (
+    <div className="max-w-xl mx-auto bg-white p-6 rounded shadow mt-6">
+      <h2 className="text-xl font-semibold mb-4">Registrar nueva tarea</h2>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label>Tema</label>
+          <select name="topic_id" value={form.topic_id} onChange={handleChange} className="w-full border p-2 rounded" required>
+            <option value="">Selecciona un tema</option>
+            <option value="asd">Ponis</option>
+            {topics.map((topic) => (
+              <option key={topic.id} value={topic.id}>{topic.title}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label>Título</label>
+          <input type="text" name="title" value={form.title} onChange={handleChange} className="w-full border p-2 rounded" required />
+        </div>
+        <div>
+          <label>Instrucciones</label>
+          <textarea name="instructions" value={form.instructions} onChange={handleChange} className="w-full border p-2 rounded" required />
+        </div>
+        <div>
+          <label>Fecha de entrega</label>
+          <input type="date" name="due_date" value={form.due_date} onChange={handleChange} className="w-full border p-2 rounded" required />
+        </div>
+        <button type="submit" className="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700">Registrar</button>
+      </form>
+    </div>
+  );
 };
 
 export default AddTask;

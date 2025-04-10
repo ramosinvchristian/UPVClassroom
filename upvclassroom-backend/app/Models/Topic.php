@@ -9,11 +9,21 @@ class Topic extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'classroom_id'];
+    protected $fillable = ['title', 'description', 'classroom_id'];
 
-    // Relación con la clase
     public function classroom()
     {
         return $this->belongsTo(Classroom::class);
     }
+
+    public function tasks()
+    {
+    return $this->hasMany(Task::class);
+    }
+
+    public function materials()
+    {
+    return $this->hasMany(Material::class);
+    }
+
 }

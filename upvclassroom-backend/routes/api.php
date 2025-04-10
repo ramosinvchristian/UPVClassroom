@@ -8,6 +8,9 @@ use App\Http\Controllers\NoticeController;
 use App\Http\Controllers\TemaController;
 use App\Http\Controllers\TareaController;
 use App\Http\Controllers\StudentSearchController;
+use App\Http\Controllers\TopicController;
+use App\Http\Controllers\TaskController;
+use App\Http\Controllers\MaterialController;
 
 // 🔓 Ruta pública para login
 Route::post('/login', [AuthController::class, 'login']);
@@ -51,6 +54,24 @@ Route::middleware('auth:sanctum')->group(function () {
     // Definir la ruta para buscar estudiantes
     Route::get('/search-students', [StudentController::class, 'search']);
 
+    Route::get('/teacher/classes/{classroom}/create-topic', [TopicController::class, 'create'])->name('teacher.class.createTopic');
+    
+    // Ruta para registrar una nueva tarea
+    Route::get('/teacher/classes/{classroom}/create-task', [TaskController::class, 'create'])->name('teacher.class.createTask');
+    
+    // Ruta para registrar nuevo material
+    Route::get('/teacher/classes/{classroom}/create-material', [MaterialController::class, 'create'])->name('teacher.class.createMaterial');
 
+    Route::post('/classrooms/{id}/topics', [TopicController::class, 'store']);
+    
+    Route::get('/classrooms/{id}/topics', [TopicController::class, 'index']);
+
+    Route::post('/classrooms/{id}/tasks', [TaskController::class, 'store']);
+
+    Route::get('/classrooms/{id}/tasks', [TaskController::class, 'index']);
+
+    Route::post('/topics/{id}/materials', [MaterialController::class, 'store']);
+
+    Route::get('/classrooms/{id}/materials', [MaterialController::class, 'index']);
 
 });

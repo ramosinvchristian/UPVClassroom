@@ -7,13 +7,13 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Run the migrations...
      */
     public function up(): void
     {
         Schema::create('classroom_user', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('classroom_id')->constrained('classes')->onDelete('cascade');
+            $table->foreignId('classroom_id')->constrained('classrooms')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });

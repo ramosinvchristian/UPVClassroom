@@ -34,8 +34,14 @@ class Classroom extends Model
     {
         return $this->belongsToMany(User::class, 'classroom_user', 'classroom_id', 'user_id');
     }
+
     public function notices()
     {
         return $this->hasMany(Notice::class);
+    }
+
+    public function topics()
+    {
+    return $this->hasMany(Topic::class);
     }
 }

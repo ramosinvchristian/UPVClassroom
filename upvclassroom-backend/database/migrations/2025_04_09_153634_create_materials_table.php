@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('materials', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->foreignId('topic_id')->constrained('topics')->onDelete('cascade');
-            $table->string('file_path');
+            $table->string('title');
+            $table->text('description')->nullable();
+            $table->string('file_path')->nullable(); // Ruta del archivo subido
+            $table->foreignId('topic_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
