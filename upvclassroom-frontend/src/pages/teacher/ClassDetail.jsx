@@ -220,7 +220,7 @@ function ClassDetail() {
           <ul className="space-y-2 list-disc list-inside">
             {topics.map((topic) => (
               <li key={topic.id}>
-                <strong>{topic.title}</strong>
+                <strong>{topic.name}</strong>
                 {topic.description && <p className="text-sm text-gray-600">{topic.description}</p>}
               </li>
             ))}

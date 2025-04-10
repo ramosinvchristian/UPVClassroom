@@ -9,8 +9,13 @@ class Notice extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'content', 
-    'classroom_id', 'user_id', 'attachment'];
+    protected $fillable = [
+        'title', 
+        'content', 
+        'classroom_id', 
+        'user_id', 
+        'attachment'
+    ];
 
     public function classroom()
     {

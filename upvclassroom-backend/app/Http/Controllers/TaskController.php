@@ -16,7 +16,8 @@ class TaskController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'required|string',
             'due_date' => 'required|date',
-        ]);
+            'topic_id' => 'required|exists:topics,id',
+    ]);
 
         $topic = Topic::findOrFail($topic_id);
 

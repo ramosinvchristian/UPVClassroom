@@ -24,7 +24,7 @@ class NoticeController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'body' => 'nullable|string',
+            'content' => 'nullable|string', // Usar 'content', no 'body'
             'attachment' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048'
         ]);
 
@@ -36,11 +36,12 @@ class NoticeController extends Controller
 
         $notice = Notice::create([
             'classroom_id' => $classroom_id,
+            'user_id' => auth()->id(), // ✅ Este es el fix clave
             'title' => $request->title,
-            'content' => $request->content, // ← importante
+            'content' => $request->content,
             'attachment' => $attachmentPath,
         ]);
-//perro
+
         return response()->json([
             'message' => 'Aviso creado exitosamente.',
             'notice' => $notice

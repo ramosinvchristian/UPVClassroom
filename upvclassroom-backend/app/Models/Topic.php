@@ -9,7 +9,8 @@ class Topic extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'description', 'classroom_id'];
+    // ✅ Actualizado con los campos reales
+    protected $fillable = ['name', 'classroom_id'];
 
     public function classroom()
     {
@@ -18,12 +19,11 @@ class Topic extends Model
 
     public function tasks()
     {
-    return $this->hasMany(Task::class);
+        return $this->hasMany(Task::class);
     }
 
     public function materials()
     {
-    return $this->hasMany(Material::class);
+        return $this->hasMany(Material::class);
     }
-
 }
