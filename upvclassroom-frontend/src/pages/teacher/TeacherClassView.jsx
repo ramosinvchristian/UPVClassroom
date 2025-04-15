@@ -161,6 +161,17 @@ const TeacherClassView = () => {
             >
               Personas
             </Link>
+
+            <Link 
+      to="/teacher/grade" 
+      className={`py-4 px-1 border-b-2 font-medium ${
+        location.pathname.includes('grade')
+          ? 'border-blue-500 text-blue-600' 
+          : 'text-gray-500 hover:text-gray-700'
+      }`}
+    >
+      Tareas Pendientes de Calificación
+    </Link>
           </div>
         </div>
       
@@ -326,53 +337,62 @@ const TeacherClassView = () => {
                     )}
 
                     {/* Anuncios existentes */}
-                    {announcements.map((item) => (
-                      <div key={item.id} className="bg-white px-6 py-3 rounded-lg shadow border w-full hover:bg-gray-50">
-                        <div className="flex items-start space-x-3">
-                          <div className="w-10 h-10 rounded-full overflow-hidden bg-red-700 flex-shrink-0 text-white font-semibold">
-                            <img 
-                              src={item.authorImage} 
-                              alt={item.author}
-                              className="w-full h-full object-cover"
-                            />
+                      {announcements.map((item) => (
+                        <Link 
+                          to="/teacher/assignment" 
+                          key={item.id} 
+                          className="block bg-white px-6 py-3 rounded-lg shadow border w-full hover:bg-gray-50 hover:border-red-200 transition-colors"
+                        >
+                          <div className="flex items-start space-x-3">
+                            <div className="w-10 h-10 rounded-full overflow-hidden bg-red-700 flex-shrink-0 text-white font-semibold">
+                              <img 
+                                src={item.authorImage} 
+                                alt={item.author}
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                            <div className="flex-1">
+                              <p className="text-sm font-medium text-gray-500 [text-shadow:_0_1px_1px_rgb(0_0_0_/_10%)]">
+                                {item.author} • {item.date}
+                              </p>
+                              <h3 className="font-semibold text-base mt-1 [text-shadow:_0_1px_1px_rgb(0_0_0_/_10%)]">
+                                {item.title}
+                              </h3>
+                              <p className="text-gray-700 text-sm mt-2">{item.content}</p>
+                              
+                              {/* Mostrar adjuntos si existen */}
+                              {item.attachments.length > 0 && (
+                                <div className="mt-3">
+                                  {item.attachments[0].type?.startsWith('image/') ? (
+                                    <img 
+                                      src={URL.createObjectURL(item.attachments[0])} 
+                                      alt="Adjunto" 
+                                      className="max-h-64 max-w-full rounded border"
+                                    />
+                                  ) : (
+                                    <div 
+                                      onClick={(e) => e.stopPropagation()}
+                                      className="inline-block"
+                                    >
+                                      <a 
+                                        href={URL.createObjectURL(item.attachments[0])} 
+                                        target="_blank" 
+                                        rel="noopener noreferrer"
+                                        className="inline-flex items-center px-3 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
+                                      >
+                                        <svg className="h-5 w-5 text-red-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                                        </svg>
+                                        Ver archivo adjunto
+                                      </a>
+                                    </div>
+                                  )}
+                                </div>
+                              )}
+                            </div>
                           </div>
-                          <div className="flex-1">
-                            <p className="text-sm font-medium text-gray-500 [text-shadow:_0_1px_1px_rgb(0_0_0_/_10%)]">
-                              {item.author} • {item.date}
-                            </p>
-                            <h3 className="font-semibold text-base mt-1 [text-shadow:_0_1px_1px_rgb(0_0_0_/_10%)]">
-                              {item.title}
-                            </h3>
-                            <p className="text-gray-700 text-sm mt-2">{item.content}</p>
-                            
-                            {/* Mostrar adjuntos si existen */}
-                            {item.attachments.length > 0 && (
-                              <div className="mt-3">
-                                {item.attachments[0].type?.startsWith('image/') ? (
-                                  <img 
-                                    src={URL.createObjectURL(item.attachments[0])} 
-                                    alt="Adjunto" 
-                                    className="max-h-64 max-w-full rounded border"
-                                  />
-                                ) : (
-                                  <a 
-                                    href={URL.createObjectURL(item.attachments[0])} 
-                                    target="_blank" 
-                                    rel="noopener noreferrer"
-                                    className="inline-flex items-center px-3 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
-                                  >
-                                    <svg className="h-5 w-5 text-red-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                                    </svg>
-                                    Ver archivo adjunto
-                                  </a>
-                                )}
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    ))}
+                        </Link>
+                      ))}
                   </>
                 )}
 

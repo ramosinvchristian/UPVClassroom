@@ -18,6 +18,9 @@ import CreateThemeView from "./pages/teacher/CreateThemeView";
 import CreateHomeworkView from "./pages/teacher/CreateHomeworkView";
 import CreateMaterialView from "./pages/teacher/CreateMaterialView";
 import HomeView from "./pages/teacher/HomeView";
+import LoginView from "./pages/auth/LoginView"
+import GradeAssignmentsView from "./pages/teacher/GradeAssignmentsView";
+import AssignmentSubmissionView from "./pages/teacher/AssignmentSubmissionView";
 
 function App() {
   return (
@@ -42,6 +45,7 @@ function App() {
         <Route path="/student/classes" element={<h1>Clases del Alumno</h1>} />
     
         {/* Vistas Maestros */}
+        <Route path="/login-view" element={<LoginView />} />
         <Route path="/teacher/home" element={<HomeView />} />
         <Route path="/teacher/create-class" element={<CreateClassView />} /> 
         <Route path="/teacher/class" element={<TeacherClassView />} />
@@ -50,6 +54,9 @@ function App() {
         <Route path="/teacher/create-homework" element={<CreateHomeworkView />} />
         <Route path="/teacher/create-material" element={<CreateMaterialView />} />
         <Route path="/teacher/classwork" element={<ClassWorkView />} />
+        <Route path="/teacher/grade" element={<GradeAssignmentsView />} />
+        <Route path="/teacher/assignment" element={<AssignmentSubmissionView />} />
+        
         
         {/* <Route path="/teacher/home" element={<ClassroomHome />} /> */}
 

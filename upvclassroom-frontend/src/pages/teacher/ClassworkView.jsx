@@ -129,6 +129,17 @@ const ClassWorkView = () => {
             >
               Personas
             </Link>
+
+            <Link 
+      to="/teacher/grade" 
+      className={`py-4 px-1 border-b-2 font-medium ${
+        location.pathname.includes('grade')
+          ? 'border-blue-500 text-blue-600' 
+          : 'text-gray-500 hover:text-gray-700'
+      }`}
+    >
+      Tareas Pendientes de Calificación
+    </Link>
           </div>
         </div>
       
@@ -178,8 +189,10 @@ const ClassWorkView = () => {
               {/* Lista de Contenido */}
               <div className="space-y-4">
                 {content.map(tema => (
+                  
                   <div key={tema.id} className="bg-white rounded-lg overflow-hidden shadow border">
                     {/* Encabezado del Tema */}
+                    
                     <div 
                       className={`p-4 cursor-pointer hover:bg-gray-50 ${selectedItem?.id === tema.id ? 'bg-red-50 border-l-4 border-red-500' : ''}`}
                       onClick={() => toggleTema(tema.id)}
@@ -202,6 +215,13 @@ const ClassWorkView = () => {
                     {tema.isOpen && (
                       <div className="border-t">
                         {tema.items.map(item => (
+
+                          <Link 
+                          to="/teacher/assignment" 
+                          key={item.id}
+                          className={`block p-4 border-b last:border-b-0 hover:bg-gray-50 ${selectedItem?.id === item.id ? 'bg-red-50' : ''}`}
+                          >
+
                           <div 
                             key={item.id}
                             className={`p-4 border-b last:border-b-0 hover:bg-gray-50 cursor-pointer ${selectedItem?.id === item.id ? 'bg-red-50' : ''}`}
@@ -238,11 +258,15 @@ const ClassWorkView = () => {
                                 </div>
                               )}
                             </div>
+                            
                           </div>
+                          </Link>
                         ))}
                       </div>
                     )}
                   </div>
+
+
                 ))}
               </div>
             </div>

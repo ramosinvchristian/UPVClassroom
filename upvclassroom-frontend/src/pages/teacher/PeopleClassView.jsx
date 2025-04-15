@@ -84,6 +84,17 @@ const PeopleClassView = () => {
             >
               Personas
             </Link>
+
+            <Link 
+      to="/teacher/grade" 
+      className={`py-4 px-1 border-b-2 font-medium ${
+        location.pathname.includes('grade')
+          ? 'border-blue-500 text-blue-600' 
+          : 'text-gray-500 hover:text-gray-700'
+      }`}
+    >
+      Tareas Pendientes de Calificación
+    </Link>
           </div>
         </div>
       
