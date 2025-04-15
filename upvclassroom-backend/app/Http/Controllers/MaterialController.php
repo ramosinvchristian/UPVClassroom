@@ -55,4 +55,40 @@ class MaterialController extends Controller
 
         return response()->json($materials);
     }
+
+    public function update(Request $request, $id)
+    {
+        $material = Material::findOrFail($id);
+    
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+        ]);
+    
+        $material->title = $request->title;
+        $material->description = $request->description;
+    
+        if ($request->hasFile('file')) {
+            $filePath = $request->file('file')->store('materials', 'public');
+            $material->file_path = $filePath;
+        }
+    
+        $material->save();
+    
+        return response()->json(['message' => 'Material actualizado correctamente', 'material' => $material]);
+    }
+    
+    public function destroy($id)
+    {
+        $material = Material::findOrFail($id);
+    
+        if ($material->file_path && \Storage::disk('public')->exists($material->file_path)) {
+            \Storage::disk('public')->delete($material->file_path);
+        }
+    
+        $material->delete();
+    
+        return response()->json(['message' => 'Material eliminado correctamente']);
+    }
+    
 }

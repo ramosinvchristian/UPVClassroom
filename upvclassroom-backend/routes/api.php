@@ -11,8 +11,8 @@ use App\Http\Controllers\StudentSearchController;
 use App\Http\Controllers\TopicController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\MaterialController;
+use App\Http\Controllers\TaskSubmissionController;
 
-// 🔓 Ruta pública para login
 Route::post('/login', [AuthController::class, 'login']);
 
 // 🔐 Rutas protegidas con Sanctum
@@ -39,39 +39,44 @@ Route::middleware('auth:sanctum')->group(function () {
     // 📄 Obtener detalles de una clase (con alumnos)
     Route::get('/classrooms/{id}', [ClassroomController::class, 'show']);
 
-    // 📢 Avisos: obtener y crear
+    // 📄 Ver clase como alumno
+    Route::get('/student/classrooms/{id}', [ClassroomController::class, 'showForStudent']);
+
+    // 📢 Avisos
     Route::get('/classrooms/{id}/notices', [NoticeController::class, 'index']);
     Route::post('/classrooms/{id}/notices', [NoticeController::class, 'store']);
 
-    // 📑 Registrar nuevo tema
-    Route::post('/temas', [TemaController::class, 'store']);
-
-    // 📝 Registrar nueva tarea
-    Route::post('/tareas', [TareaController::class, 'store']);
-
-    Route::get('/student/classrooms/{id}', [ClassroomController::class, 'showForStudent']);
-
-    // Definir la ruta para buscar estudiantes
-    Route::get('/search-students', [StudentController::class, 'search']);
-
-    Route::get('/teacher/classes/{classroom}/create-topic', [TopicController::class, 'create'])->name('teacher.class.createTopic');
-    
-    // Ruta para registrar una nueva tarea
-    Route::get('/teacher/classes/{classroom}/create-task', [TaskController::class, 'create'])->name('teacher.class.createTask');
-    
-    // Ruta para registrar nuevo material
-    Route::get('/teacher/classes/{classroom}/create-material', [MaterialController::class, 'create'])->name('teacher.class.createMaterial');
-
+    // 📑 Temas
     Route::post('/classrooms/{id}/topics', [TopicController::class, 'store']);
-    
     Route::get('/classrooms/{id}/topics', [TopicController::class, 'index']);
+    Route::get('/classrooms/{id}/temas-contenido', [TopicController::class, 'contenidoPorClase']);
 
+    // 📝 Tareas
     Route::post('/classrooms/{id}/tasks', [TaskController::class, 'store']);
-
     Route::get('/classrooms/{id}/tasks', [TaskController::class, 'index']);
 
+    // 📎 Materiales
     Route::post('/topics/{id}/materials', [MaterialController::class, 'store']);
-
     Route::get('/classrooms/{id}/materials', [MaterialController::class, 'index']);
+    Route::put('/materials/{id}', [MaterialController::class, 'update']);
+    Route::delete('/materials/{id}', [MaterialController::class, 'destroy']);
 
+    // 🔍 Formularios de maestro (para front)
+    Route::get('/teacher/classes/{classroom}/create-topic', [TopicController::class, 'create'])->name('teacher.class.createTopic');
+    Route::get('/teacher/classes/{classroom}/create-task', [TaskController::class, 'create'])->name('teacher.class.createTask');
+    Route::get('/teacher/classes/{classroom}/create-material', [MaterialController::class, 'create'])->name('teacher.class.createMaterial');
+
+    // 🧑‍🎓 Entregas del alumno
+    Route::post('/tasks/{taskId}/submit', [TaskSubmissionController::class, 'store']);
+    Route::get('/student/classrooms/{classroomId}/submissions', [TaskSubmissionController::class, 'index']);
+
+    // 🧑‍🏫 Maestro: ver y calificar entregas
+    Route::get('/tasks/{taskId}/submissions', [TaskSubmissionController::class, 'showSubmissions']);
+    Route::post('/submissions/{submissionId}/grade', [TaskSubmissionController::class, 'grade']);
+
+    // 🧑‍🏫 Ver entregas de una tarea
+    Route::get('/tasks/{task}/submissions', [TaskSubmissionController::class, 'listByTask']);
+
+    // 🧑‍🏫 Calificar una entrega
+    Route::put('/submissions/{submission}/grade', [TaskSubmissionController::class, 'grade']);
 });

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Topic;
+use App\Models\Classroom;
 use Illuminate\Http\Request;
 
 class TopicController extends Controller
@@ -16,8 +17,8 @@ class TopicController extends Controller
         ]);
 
         $topic = Topic::create([
-            'name' => $validated['title'], // ✅ Usar 'name' como en tu tabla
-            'description' => $validated['description'] ?? null, // ⚠️ Este campo no existe aún
+            'name' => $validated['title'],
+            'description' => $validated['description'] ?? null,
             'classroom_id' => $id,
         ]);
 
@@ -32,5 +33,13 @@ class TopicController extends Controller
     {
         $topics = Topic::where('classroom_id', $id)->get();
         return response()->json($topics);
+    }
+
+    // Obtener temas con materiales y tareas (para el alumno)
+    public function contenidoPorClase($classroomId)
+    {
+        $classroom = Classroom::findOrFail($classroomId);
+        $temas = $classroom->topics()->with(['materials', 'tasks'])->get();
+        return response()->json($temas);
     }
 }
