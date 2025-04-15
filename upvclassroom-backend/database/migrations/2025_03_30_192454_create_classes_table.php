@@ -9,16 +9,16 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('classrooms', function (Blueprint $table) {
+        Schema::create('classes', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('teacher_id');
             $table->string('name');
             $table->text('description')->nullable();
             $table->string('group_code')->unique();
             $table->string('career');
-            $table->string('cuatrimestre'); // o 'cuatrimestre'
-            $table->unsignedBigInteger('teacher_id');
+            $table->string('cuatrimestre');
             $table->timestamps();
 
             $table->foreign('teacher_id')->references('id')->on('users')->onDelete('cascade');
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('classrooms');
+        Schema::dropIfExists('classes');
     }
 };
